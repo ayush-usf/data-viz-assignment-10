@@ -75,4 +75,19 @@ function drawMap(error, states, facilities) {
 
     svg.call(zoom);
 
+    // Adding chart label
+    svg.append("text")
+        .attr("class", "chart-label")
+        .attr("x",  width / 3)
+        .attr("y", 30)
+        .text("Top 6 Cities with highest vote count for Bernie Sanders (2016)")
+
+    // Adding chart label
+    svg.append("text")
+        .attr("class", "chart-label")
+        .attr("x",  width / 2)
+        .attr("y", 60)
+        .text("[Zoomable Proportional Symbols map]")
+
+
 } // end drawMap
