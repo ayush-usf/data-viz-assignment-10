@@ -14,8 +14,9 @@ var x = d3.scaleLinear()
     .rangeRound([600, 860]);
 
 var color = d3.scaleThreshold()
-    .domain(d3.range(1 , 100))
+    .domain(d3.range(1 , 10))
     .range(d3.schemeBlues[9]);
+
 
 var g = svg.append("g")
     .attr("class", "key")
@@ -41,18 +42,16 @@ g.append("text")
     .attr("fill", "#000")
     .attr("text-anchor", "start")
     .attr("font-weight", "bold")
-    .text("Vote percentage");
-
-g.call(d3.axisBottom(x)
-    .tickSize(13)
-    .tickFormat(function(x, i) { return i ? x : x + "%"; })
-    .tickValues(color.domain()))
-    .select(".domain")
-    .remove();
+    .text("Vote Percentage (->  increasing)");
 
 var promises = [
     d3.json("https://d3js.org/us-10m.v1.json"),
-    d3.tsv("vote_percentage.tsv", function(d) { unemployment.set(d.id, +d.percentage); })
+    d3.tsv("vote_percentage.tsv", function(d) {
+        // color.domain([
+        //     d3.min(d, function(d) { return +d.percentage; }),
+        //     d3.max(d, function(d) { return +d.percentage; })
+        // ]);
+        unemployment.set(d.id, +d.percentage); })
 ]
 
 Promise.all(promises).then(ready)
@@ -76,4 +75,12 @@ function ready([us]) {
         .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
         .attr("class", "states")
         .attr("d", path);
+
+    // Adding chart label
+    svg.append("text")
+        .attr("class", "chart-label")
+        .attr("x",  width / 5)
+        .attr("y", 12)
+        .text("Top 6 Cities with highest vote count for Bernie Sanders (2016)")
+
 }
