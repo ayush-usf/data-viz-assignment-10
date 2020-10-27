@@ -25,7 +25,7 @@ var radius,
 
 queue()
     .defer(d3.json, 'us.json')
-    .defer(d3.json, 'direct-emitters-top-100.json')
+    .defer(d3.json, 'top-6.json')
     .await(drawMap);
 
 function drawMap(error, states, facilities) {
