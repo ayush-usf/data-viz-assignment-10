@@ -24,14 +24,14 @@ var radius,
     zoom;
 
 queue()
-    .defer(d3.json, 'us-states.json')
+    .defer(d3.json, 'us.json')
     .defer(d3.json, 'direct-emitters-top-100.json')
     .await(drawMap);
 
 function drawMap(error, states, facilities) {
 
     g.append('path')
-        .datum(topojson.feature(states, states.objects.usStates))
+        .datum(topojson.feature(states, states.objects.counties))
         .attr('d', path)
         .attr('class', 'states');
 
@@ -41,7 +41,7 @@ function drawMap(error, states, facilities) {
         datum;
 
     for (var i=0; i<length; i++) {
-        datum = facilities.features[i].properties.total_votes;
+        datum = facilities.features[i].properties.total_emissions;
         data.push(Number(datum));
     }
 
@@ -56,9 +56,7 @@ function drawMap(error, states, facilities) {
         .data(facilities.features)
         .enter().append('path')
         .attr('class', 'facilities')
-        .attr('d', path.pointRadius(function(d) {
-            return radius(d.properties.total_votes);
-        }));
+        .attr('d', path.pointRadius(function(d) { return radius(d.properties.total_emissions); }));
 
     zoom = d3.behavior.zoom()
         .scaleExtent([1, 16])
@@ -68,7 +66,7 @@ function drawMap(error, states, facilities) {
             radius.range([2/d3.event.scale, 30/d3.event.scale]);
             facilities
                 .attr('d', path.pointRadius(function(d) {
-                    return radius(d.properties.total_votes);
+                    return radius(d.properties.total_emissions);
                 }))
                 .attr("stroke-width", (1/d3.event.scale)*2+"px");
         });
@@ -80,7 +78,7 @@ function drawMap(error, states, facilities) {
         .attr("class", "chart-label")
         .attr("x",  width / 3)
         .attr("y", 30)
-        .text("Top 6 Cities with highest vote count for Bernie Sanders (2016)")
+        .text("Top 6 Cities with maximum Green House Emission")
 
     // Adding chart label
     svg.append("text")
