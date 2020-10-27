@@ -41,7 +41,7 @@ function drawMap(error, states, facilities) {
         datum;
 
     for (var i=0; i<length; i++) {
-        datum = facilities.features[i].properties.total_emissions;
+        datum = facilities.features[i].properties.total_votes;
         data.push(Number(datum));
     }
 
@@ -56,7 +56,7 @@ function drawMap(error, states, facilities) {
         .data(facilities.features)
         .enter().append('path')
         .attr('class', 'facilities')
-        .attr('d', path.pointRadius(function(d) { return radius(d.properties.total_emissions); }));
+        .attr('d', path.pointRadius(function(d) { return radius(d.properties.total_votes); }));
 
     zoom = d3.behavior.zoom()
         .scaleExtent([1, 16])
@@ -66,7 +66,7 @@ function drawMap(error, states, facilities) {
             radius.range([2/d3.event.scale, 30/d3.event.scale]);
             facilities
                 .attr('d', path.pointRadius(function(d) {
-                    return radius(d.properties.total_emissions);
+                    return radius(d.properties.total_votes);
                 }))
                 .attr("stroke-width", (1/d3.event.scale)*2+"px");
         });
@@ -78,7 +78,7 @@ function drawMap(error, states, facilities) {
         .attr("class", "chart-label")
         .attr("x",  width / 3)
         .attr("y", 30)
-        .text("Top 6 Cities with maximum Green House Emission")
+        .text("Top 6 Cities with highest vote count for Bernie Sanders (2016)")
 
     // Adding chart label
     svg.append("text")
